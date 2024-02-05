@@ -1,0 +1,65 @@
+<html>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    #sn {display: none;}
+    #dk {display: none;}
+    #bts {display: flex; gap: 8px;}
+    button {padding:12px;}
+  </style>
+  <h1 id=ttl>Water Reminder</h1>
+  <div id=bts>
+    <button id=st>Start 30 m</button>
+    <button id=dk>Drank</button>
+    <button id=sn>Snooze +5 m</button>
+  </div>
+  <audio src="./n.mp3" loop id=ado ></audio>
+
+  <script>
+    var s
+    var t
+    var b = (e) =>  e.style.display = "block"
+    var n = (e) =>  e.style.display = "none"
+    var r = (o) => {
+      ado.pause()
+      ado.currentTime=0;
+      ttl.innerText = "Water Reminder"
+      st.innerHTML = s ? 'Stop' : 'Start'
+      n(sn)
+      n(dk)
+      s && sti(o)
+      !s && clearInterval(t)
+    }
+    st.onclick = () => {
+      s = !s
+      r()    
+    }
+    dk.onclick = () => {
+      r()
+    }
+    sn.onclick = () => {
+      r(300000)
+    }
+    var sti = (o = 1800000) => {
+      clearTimeout(t)
+      t = setTimeout(() => {
+        ttl.innerText = "DRINK WATER"
+        b(dk)
+        b(sn)
+
+        ado.play()
+      }, o);
+    }
+  </script>
+</html>
