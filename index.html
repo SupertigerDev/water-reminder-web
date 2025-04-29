@@ -1,1 +1,87 @@
-<meta content="width=device-width,initial-scale=1"name=viewport><style>body{font-family:Arial;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background-color:#000;color:#fff;margin:0;padding:0}#sn{display:none}#dk{display:none}#bts{display:flex;gap:8px}button{padding:12px}</style><h1 id=ttl>Water Reminder</h1><div id=bts><button id=st>Start 30 m</button> <button id=dk>Drank</button> <button id=sn>Snooze +5 m</button></div><audio id=ado loop src=./n.mp3></audio><script>var s,t,b=t=>t.style.display="block",n=t=>t.style.display="none",r=e=>{ado.pause(),ado.currentTime=0,ttl.innerText="Water Reminder",st.innerHTML=s?"Stop":"Start",n(sn),n(dk),s&&sti(e),!s&&clearInterval(t)};st.onclick=()=>{s=!s,r()},dk.onclick=()=>{r()},sn.onclick=()=>{r(3e5)};var sti=(e=18e5)=>{clearTimeout(t),t=setTimeout((()=>{ttl.innerText="DRINK WATER",b(dk),b(sn),ado.play()}),e)}</script>
+<html>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    #startButton {
+      margin-bottom: 12px;
+    }
+    #snoozeButton {display: none;}
+    #drankButton {display: none;}
+    #buttons {margin-top: 10px; display: flex; flex-direction: column; gap: 4px;width: 80%;}
+    button {
+      padding:12px;
+      border-radius: 6px;
+      border: solid 1px rgba(255, 255, 255, 0.4);
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      };
+    }
+  </style>
+  <h1 id=title>Water Reminder</h1>
+  <div id=buttons>
+    <button id=startButton>Start 30m</button>
+    <button id=drankButton>Drank</button>
+    <button id=snoozeButton>Snooze +5m</button>
+  </div>
+  <audio src="./n.mp3" loop id=audio ></audio>
+
+  <script>
+    
+    let started = false;
+    let timeoutId
+    
+    let displayBlock = (e) =>  e.style.display = "block"
+    let displayNone = (e) =>  e.style.display = "none";
+
+    let startTimeout = (o = 1800000) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        title.innerText = "DRINK WATER"
+        displayBlock(drankButton)
+        displayBlock(snoozeButton)
+
+        audio.volume = 0.5
+
+        audio.play()
+      }, o);
+    }
+
+    let reset = (o) => {
+      audio.pause()
+      audio.currentTime=0;
+      title.innerText = "Water Reminder"
+      startButton.innerHTML = started ? 'Stop' : 'Start 30m'
+      startButton.style.backgroundColor = started ? '#ff6f6f' : '#09b1f1'
+      displayNone(snoozeButton)
+      displayNone(drankButton)
+      started && startTimeout(o)
+      !started && clearTimeout(timeoutId)
+    }
+    startButton.onclick = () => {
+      started = !started
+      reset()    
+    }
+    drankButton.onclick = () => {
+      reset()
+    }
+    snoozeButton.onclick = () => {
+      reset(300000)
+    }
+
+
+  </script>
+</html>

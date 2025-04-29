@@ -1,3 +1,3 @@
 window.onload = () => {
-  st.click()
+  startButton.click()
 }

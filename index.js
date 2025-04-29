@@ -30,6 +30,11 @@ app.whenReady().then(() => {
 
 
   const win = new BrowserWindow({
+    width: 400,
+    height: 400,
+    resizable: false,
+    autoHideMenuBar: true,
+    icon: path.join(__dirname, "icon.png"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
