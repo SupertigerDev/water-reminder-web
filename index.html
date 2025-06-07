@@ -1,6 +1,12 @@
 <html>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <style>
+    :root {
+      --bg: #00171f;
+      --alert: rgb(224, 79, 79);
+      --primary: #10a3dd;
+      --pane-color: rgba(255, 255, 255, 0.1);
+    }
     body {
       font-family: Arial;
       height: 100%;
@@ -8,7 +14,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #000;
+      background-color: var(--bg);
       color: #fff;
       margin: 0;
       padding: 0;
@@ -16,72 +22,102 @@
     #startButton {
       margin-bottom: 12px;
     }
-    #snoozeButton {display: none;}
-    #drankButton {display: none;}
-    #buttons {margin-top: 10px; display: flex; flex-direction: column; gap: 4px;width: 80%;}
+
+    #buttons {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 80%;
+    }
     button {
-      padding:12px;
-      border-radius: 6px;
-      border: solid 1px rgba(255, 255, 255, 0.4);
-      background-color: black;
-      color: white;
+      overflow: hidden;
+      padding: 12px;
+      border-radius: 99999px;
+      border: none;
+      color: rgba(255,255,255,0.8);
       cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      transition: 0.2s;
+      background: var(--pane-color);
+
       &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      };
+        color: white;
+      }
     }
   </style>
-  <h1 id=title>Water Reminder</h1>
-  <div id=buttons>
-    <button id=startButton>Start 30m</button>
-    <button id=drankButton>Drank</button>
-    <button id=snoozeButton>Snooze +5m</button>
+  <h1 id="title">Water Reminder</h1>
+  <div id="buttons">
+    <button id="startButton">Start 30 minute reminder</button>
+    <button id="drankButton">Drank</button>
+    <button id="snoozeButton">Snooze For 5 Minutes</button>
   </div>
-  <audio src="./n.mp3" loop id=audio ></audio>
+  <audio src="./n.mp3" loop id="audio"></audio>
 
   <script>
-    
     let started = false;
-    let timeoutId
-    
-    let displayBlock = (e) =>  e.style.display = "block"
-    let displayNone = (e) =>  e.style.display = "none";
+    let timeoutId;
 
-    let startTimeout = (o = 1800000) => {
-      clearTimeout(timeoutId)
+    let disableButton = (e) => {
+      e.style.opacity = "0.4";
+      e.style.pointerEvents = "none";
+    };
+    let enableButton = (e) => {
+      e.style.opacity = "1";
+      e.style.pointerEvents = "all";
+    };
+
+    let ONE_MINUTE = 60000;
+    let FIVE_MINUTES = ONE_MINUTE * 5;
+    let THIRTY_MINUTES = ONE_MINUTE * 30;
+
+    let startTimeout = (o = THIRTY_MINUTES) => {
+      clearTimeout(timeoutId);
+      const remindAt = Date.now() + o;
+      const readableTime = Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+      }).format(new Date(remindAt));
+      title.innerHTML = `Remind At ${readableTime}`;
       timeoutId = setTimeout(() => {
-        title.innerText = "DRINK WATER"
-        displayBlock(drankButton)
-        displayBlock(snoozeButton)
+        title.innerText = "DRINK WATER";
+        enableButton(snoozeButton);
+        enableButton(drankButton);
 
-        audio.volume = 0.5
+        audio.volume = 0.5;
 
-        audio.play()
+        audio.play();
       }, o);
-    }
+    };
 
     let reset = (o) => {
-      audio.pause()
-      audio.currentTime=0;
-      title.innerText = "Water Reminder"
-      startButton.innerHTML = started ? 'Stop' : 'Start 30m'
-      startButton.style.backgroundColor = started ? '#ff6f6f' : '#09b1f1'
-      displayNone(snoozeButton)
-      displayNone(drankButton)
-      started && startTimeout(o)
-      !started && clearTimeout(timeoutId)
-    }
+      audio.pause();
+      audio.currentTime = 0;
+      title.innerText = "Water Reminder";
+      startButton.innerHTML = started ? "Stop" : "Start 30 minute reminder";
+      startButton.style.backgroundColor = started
+        ? "var(--alert)"
+        : "var(--primary)";
+
+
+      if (!started) {
+        disableButton(snoozeButton);
+        enableButton(drankButton);
+      }
+      disableButton(drankButton);
+      started && startTimeout(o);
+      !started && clearTimeout(timeoutId);
+    };
     startButton.onclick = () => {
-      started = !started
-      reset()    
-    }
+      started = !started;
+      reset();
+    };
     drankButton.onclick = () => {
-      reset()
-    }
+      reset();
+    };
     snoozeButton.onclick = () => {
-      reset(300000)
-    }
-
-
+      reset(FIVE_MINUTES);
+    };
   </script>
 </html>
