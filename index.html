@@ -35,7 +35,7 @@
       padding: 12px;
       border-radius: 99999px;
       border: none;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255, 255, 255, 0.8);
       cursor: pointer;
       font-weight: bold;
       user-select: none;
@@ -100,12 +100,10 @@
         ? "var(--alert)"
         : "var(--primary)";
 
-
       if (!started) {
         disableButton(snoozeButton);
         enableButton(drankButton);
       }
-      disableButton(drankButton);
       started && startTimeout(o);
       !started && clearTimeout(timeoutId);
     };
