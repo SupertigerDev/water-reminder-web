@@ -100,12 +100,15 @@
         ? "var(--alert)"
         : "var(--primary)";
 
-      if (!started) {
-        disableButton(snoozeButton);
+      if (started) {
+        enableButton(snoozeButton);
         enableButton(drankButton);
+        startTimeout(o);
+      } else {
+        disableButton(snoozeButton);
+        disableButton(drankButton);
+        clearTimeout(timeoutId);
       }
-      started && startTimeout(o);
-      !started && clearTimeout(timeoutId);
     };
     startButton.onclick = () => {
       started = !started;
