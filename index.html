@@ -72,6 +72,15 @@
     let FIVE_MINUTES = ONE_MINUTE * 5;
     let THIRTY_MINUTES = ONE_MINUTE * 30;
 
+    setInterval(() => {
+      if (title.innerHTML === "DRINK WATER") {
+        audio.play();
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }, 10000);
+
     let startTimeout = (o = THIRTY_MINUTES) => {
       clearTimeout(timeoutId);
       const remindAt = Date.now() + o;
