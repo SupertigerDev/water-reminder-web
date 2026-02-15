@@ -58,6 +58,10 @@
   <script>
     let started = false;
     let timeoutId;
+    let drankCooldownId;
+    let drankConfirmWindowId;
+    let drankArmed = false;
+    const DRANK_COOLDOWN_MS = 5000;
 
     let disableButton = (e) => {
       e.style.opacity = "0.4";
@@ -101,6 +105,18 @@
     };
 
     let reset = (o) => {
+      if (drankCooldownId) {
+        clearTimeout(drankCooldownId);
+        drankCooldownId = undefined;
+      }
+      if (drankConfirmWindowId) {
+        clearTimeout(drankConfirmWindowId);
+        drankConfirmWindowId = undefined;
+      }
+      drankArmed = false;
+      drankButton.textContent = "Drank";
+      enableButton(drankButton);
+
       audio.pause();
       audio.currentTime = 0;
       title.innerText = "Water Reminder";
@@ -124,7 +140,29 @@
       reset();
     };
     drankButton.onclick = () => {
-      reset();
+      if (!started) {
+        return;
+      }
+      if (drankArmed) {
+        reset();
+        return;
+      }
+
+      drankArmed = true;
+      drankButton.textContent = "Wait 5s then click again";
+      disableButton(drankButton);
+      drankCooldownId = setTimeout(() => {
+        drankCooldownId = undefined;
+        enableButton(drankButton);
+        drankButton.textContent = "Click again to confirm";
+        drankConfirmWindowId = setTimeout(() => {
+          drankConfirmWindowId = undefined;
+          drankArmed = false;
+          drankButton.textContent = "Drank";
+          enableButton(drankButton);
+        }, DRANK_COOLDOWN_MS);
+      }, DRANK_COOLDOWN_MS);
+      return;
     };
     snoozeButton.onclick = () => {
       reset(FIVE_MINUTES);
