@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager ./ WaterReminder --platform=win32 --arch=x64 --overwrite --out=dist"
+    "build": "electron-packager ./ WaterReminder --platform=win32 --arch=x64 --overwrite --out=dist --icon=icon.png"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@electron/packager": "^18.3.6",
-    "electron": "^37.2.5"
+    "@electron/packager": "^19.1.0",
+    "electron": "^41.2.0"
   }
 }
