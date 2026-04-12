@@ -2,13 +2,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <style>
     :root {
-      --bg: #00171f;
-      --alert: rgb(224, 79, 79);
+      --bg: black;
+      --alert: #c0392b;
       --primary: #10a3dd;
-      --pane-color: rgba(255, 255, 255, 0.1);
+      --pane-color: rgba(255, 255, 255, 0.04);
+    }
+    #title {
+      text-align: center;
+      font-weight: normal;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    #time {
+      text-align: center;
+
+      display: block;
+      font-weight: bold;
+      padding-top: 10px;
+      color: white;
+      font-size: 36px;
     }
     body {
-      font-family: Arial;
+      font-family: sans-serif;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -32,8 +47,9 @@
     }
     button {
       overflow: hidden;
-      padding: 12px;
-      border-radius: 99999px;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 14px;
       border: none;
       color: rgba(255, 255, 255, 0.8);
       cursor: pointer;
@@ -41,6 +57,7 @@
       user-select: none;
       transition: 0.2s;
       background: var(--pane-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
 
       &:hover {
         color: white;
@@ -92,7 +109,7 @@
         hour: "numeric",
         minute: "numeric",
       }).format(new Date(remindAt));
-      title.innerHTML = `Remind At ${readableTime}`;
+      title.innerHTML = `Remind At<br/><span id="time">${readableTime}</span>`;
       timeoutId = setTimeout(() => {
         title.innerText = "DRINK WATER";
         enableButton(snoozeButton);
